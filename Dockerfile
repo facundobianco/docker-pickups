@@ -15,6 +15,7 @@ RUN ln -s /usr/bin/python3.4 /usr/bin/python
 RUN for ZIP in hangups.zip pickups.zip ; do unzip /usr/local/src/${ZIP} -d /usr/local/src ; done
 RUN cd /usr/local/src/hangups-master && python setup.py install
 RUN cp -r /usr/local/src/pickups-master/pickups /usr/local/lib/python3.4/dist-packages
+RUN mkdir -p /root/.cache/hangups
 
 EXPOSE 6667
 CMD ["/usr/bin/python", "-m", "pickups"]
