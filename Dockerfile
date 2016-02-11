@@ -1,20 +1,18 @@
-FROM debian:8.2
-MAINTAINER Facundo Bianco < vando [at] van [dot] do >
+FROM frolvlad/alpine-python3:latest
+MAINTAINER Facundo Bianco <vando@van.do>
 
-ENV TERM xterm
+RUN apk update && apk add ca-certificates gcc openssl python3-dev
+RUN pip3 install hangups
 
-ADD https://github.com/tdryer/hangups/archive/master.tar.gz /usr/local/src/hangups.tgz
 ADD https://github.com/mtomwing/pickups/archive/master.tar.gz /usr/local/src/pickups.tgz
+RUN tar -C /usr/local/src -zxf /usr/local/src/pickups.tgz
+RUN mv /usr/local/src/pickups-master/pickups /usr/lib/python3.5/
+RUN rm -r /usr/local/src/pickups*
 
-RUN echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates gcc openssl python3.4-dev python3.4-minimal python3-setuptools
-
-RUN ln -s /usr/bin/python3.4 /usr/bin/python
-RUN for TGZ in hangups.tgz pickups.tgz ; do tar -C /usr/local/src -zxf /usr/local/src/${TGZ} ; done
-RUN cd /usr/local/src/hangups-master && python setup.py install
-RUN cp -r /usr/local/src/pickups-master/pickups /usr/local/lib/python3.4/dist-packages
-RUN mkdir -p /root/.cache/hangups
+RUN adduser -h /home -s /bin/false -D pickups
+USER pickups
+RUN mkdir -p /home/pickups/.cache/hangups /home/pickups/.config/hangups
 
 EXPOSE 6667
-CMD ["/usr/bin/python", "-m", "pickups", "--address", "0.0.0.0"]
+VOLUME ["/home/pickups/.config/hangups", "/home/pickups/.cache/hangups"]
+CMD ["/usr/bin/python3.5", "-m", "pickups", "--address", "0.0.0.0"]
