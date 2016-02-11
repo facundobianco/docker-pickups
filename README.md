@@ -19,4 +19,4 @@ docker run -v ${HOME}/.config/hangups:/home/pickups/.config/hangups \
 
 Previous docker image was based on Debian 8.2 (327.1 MB) and the new release
 is based on [Alpine 3.3 with Python3.5](https://github.com/frol/docker-alpine-python3)
-(167.4 MB).
+(73.7 MB).

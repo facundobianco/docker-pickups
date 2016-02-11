@@ -1,7 +1,7 @@
 FROM frolvlad/alpine-python3:latest
 MAINTAINER Facundo Bianco <vando@van.do>
 
-RUN apk update && apk add ca-certificates gcc openssl python3-dev
+RUN apk add --no-cache ca-certificates openssl
 RUN pip3 install hangups
 
 ADD https://github.com/mtomwing/pickups/archive/master.tar.gz /usr/local/src/pickups.tgz
